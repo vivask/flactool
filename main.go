@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"flactool/cmd"
+	cmd "flactool/cmd1"
 )
 
 const (
