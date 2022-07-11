@@ -54,6 +54,8 @@ func isInclude(item string, set []string) bool {
 }
 
 func getSplitFilesFromDir(dir string, extSet ...string) (list []string, err error) {
+	StartSpinner()
+	defer StopSpinner()
 	err = filepath.Walk(dir,
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
