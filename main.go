@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/vivask/flactool/cmd"
+	"flactool/cmd"
 )
 
 const (
