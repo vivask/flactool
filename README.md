@@ -1,6 +1,6 @@
 # flactool
-[![Build Status](https://github.com/vivask/flactool.git)](https://github.com/vivask/flactool.git)
-[![GitHub release](https://img.shields.io/github/v/release/vivask/flactool.svg)](https://github.com/darxkies/virtual-ip/releases/latest)
+[![Build Status](https://travis-ci.org/vivask/flactool-ip.svg?branch=main)](https://travis-ci.org/vivask/flactool)
+[![GitHub release](https://img.shields.io/github/v/release/vivask/flactool.svg)](https://github.com/vivask/flactool/releases/latest)
 ![GitHub](https://img.shields.io/github/license/vivask/flactool.svg)
 
 Multithreaded, batch tool for converting, concatenating and splitting audio files in flac, ape, wav formats
