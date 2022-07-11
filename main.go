@@ -79,7 +79,7 @@ func main() {
 	args := parseArgs()
 	help := args["help"].(bool)
 
-	if os.Args[1] == "?" || help {
+	if len(os.Args) > 1 && (os.Args[1] == "?" || help) {
 		flag.PrintDefaults()
 		return
 	}
