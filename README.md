@@ -8,26 +8,16 @@ To use the program, you must first install the following packages:
 Uasage:
 
     flactool [OPTION] 
-
-    -R      -R remove source after operation
-
-    -c	    -c concat all flac files in dir to one flac file
-
-    -d      -d "path"
-
-    -f   	-f "file"
-
-    -h	    -h help
-
-    -n	    -n output file name - number
-
-    -p   	-p Num core, default 4 (default 4)
-
-    -r	    -r rename ape file before convert
-
-    -s	    -s split flac or ape files in dir
-
-    -v	    -v verbose
+    -  -R remove source after operation
+    -  -c concat all flac files in dir to one flac file
+    -  -d "path"
+    -  -f "file"
+    -  -h help
+    -  -n output file name - number
+    -  -p Num core, default 4 (default 4)
+    -   -r rename ape file before convert
+    -   -s split flac or ape files in dir
+    -   -v verbose
 
 Examples:
 1. Convert all ape files from ~/apefiles directory (with subdirectories) to flac
