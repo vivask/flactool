@@ -4,6 +4,7 @@ To use the program, you must first install the following packages:
 - Monkey's Audio Codec; https://github.com/fernandotcl/monkeys-audio;
 - shntool;
 - cuetools;
+- sox;
 
 Uasage:
 

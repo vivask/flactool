@@ -91,15 +91,15 @@ func main() {
 	}
 
 	verbose := args["verbose"].(bool)
-	input := args["file"].(string)
+	file := args["file"].(string)
 	dir := args["dir"].(string)
-	if len(input) != 0 && len(dir) != 0 {
+	if len(file) != 0 && len(dir) != 0 {
 		fmt.Println("cannot use flags -f with -d together")
 		os.Exit(1)
 	}
 
 	// current directory
-	if len(input) == 0 && len(dir) == 0 {
+	if len(file) == 0 && len(dir) == 0 {
 		dir, err = os.Getwd()
 		if err != nil {
 			fmt.Printf("error: %v\n", err)
@@ -120,8 +120,8 @@ func main() {
 		return
 	}
 
-	if len(input) != 0 {
-		apeFileToFlac(shntool, input, verbose)
+	if len(file) != 0 {
+		fileToFlac(shntool, file, verbose)
 		return
 	}
 
@@ -129,7 +129,7 @@ func main() {
 	concat := args["concat"].(bool)
 	if len(dir) != 0 {
 		outnum := args["outnum"].(bool)
-		worked, err = apeDirToFlac(shntool, dir, parallel, outnum, concat, rename, remove, verbose)
+		worked, err = dirToFlac(shntool, dir, parallel, outnum, concat, rename, remove, verbose)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
