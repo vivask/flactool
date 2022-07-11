@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-
-	cmd "flactool/cmd"
 )
 
 const (
@@ -118,7 +116,7 @@ func main() {
 	rename := args["rename"].(bool)
 	remove := args["remove"].(bool)
 	if split {
-		err = cmd.SplitApeOrFlac(shntool, cuetag, dir, parallel, rename, remove, verbose)
+		err = SplitApeOrFlac(shntool, cuetag, dir, parallel, rename, remove, verbose)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -128,7 +126,7 @@ func main() {
 
 	//convert input file to flac
 	if len(file) != 0 {
-		cmd.FileToFlac(shntool, file, verbose)
+		FileToFlac(shntool, file, verbose)
 		return
 	}
 
@@ -137,7 +135,7 @@ func main() {
 	concat := args["concat"].(bool)
 	if len(dir) != 0 {
 		outnum := args["outnum"].(bool)
-		worked, err = cmd.DirToFlac(shntool, dir, parallel, outnum, concat, rename, remove, verbose)
+		worked, err = DirToFlac(shntool, dir, parallel, outnum, concat, rename, remove, verbose)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -146,7 +144,7 @@ func main() {
 
 	//concatenation of flac, ape, wav files by directories with conversion to flac
 	if concat {
-		err = cmd.ConcatFlacs(sox, dir, parallel, rename, remove, verbose, worked)
+		err = ConcatFlacs(sox, dir, parallel, rename, remove, verbose, worked)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
