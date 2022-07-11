@@ -12,7 +12,7 @@ import (
 )
 
 //concatenation of flac, ape, wav files by directories with conversion to flac
-func concatFlacs(sox, dir string, parallel uint, rename, remove, verbose, worked bool) error {
+func ConcatFlacs(sox, dir string, parallel uint, rename, remove, verbose, worked bool) error {
 	list, err := getFilesFromDir(dir, ".flac")
 	if err != nil {
 		return fmt.Errorf("error: %w", err)

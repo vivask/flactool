@@ -13,7 +13,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func fileToFlac(shntool, input string, verbose bool) {
+func FileToFlac(shntool, input string, verbose bool) {
 	task := fmt.Sprintf("%s conv -o flac \"%s\" -d \"%s\"", shntool, input, filepath.Dir(input))
 	err, out, errout := Shellout(task)
 	if verbose {
@@ -27,7 +27,7 @@ func fileToFlac(shntool, input string, verbose bool) {
 	}
 }
 
-func dirToFlac(shntool, dir string, parallel uint, outnum, concat, rename, remove, verbose bool) (worked bool, err error) {
+func DirToFlac(shntool, dir string, parallel uint, outnum, concat, rename, remove, verbose bool) (worked bool, err error) {
 	worked = false
 	list, err := getFilesFromDir(dir, ".ape", ".wav")
 	if err != nil {

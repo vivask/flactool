@@ -13,7 +13,7 @@ import (
 )
 
 //split flac, ape, wav files according to cue by directories
-func splitApeOrFlac(shntool, cuetag, dir string, parallel uint, rename, remove, verbose bool) error {
+func SplitApeOrFlac(shntool, cuetag, dir string, parallel uint, rename, remove, verbose bool) error {
 	files, err := getSplitFilesFromDir(dir, ".flac", ".ape", ".wav")
 	if err != nil {
 		return fmt.Errorf("error: %w", err)

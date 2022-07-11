@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/vivask/flactool/cmd"
 )
 
 const (
@@ -46,7 +48,7 @@ func parseArgs() Arguments {
 	return args
 }
 
-func searchNeedUtils() (sox, shntool, cuetag string, err error) {
+func searchNeedPkg() (sox, shntool, cuetag string, err error) {
 	pathes := strings.Split(SEARCHPATH, " ")
 	for _, path := range pathes {
 		fName := fmt.Sprintf("%s/%s", path, SOX)
@@ -86,7 +88,7 @@ func main() {
 	}
 
 	//checking the availability of third-party packages
-	sox, shntool, cuetag, err := searchNeedUtils()
+	sox, shntool, cuetag, err := searchNeedPkg()
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -116,7 +118,7 @@ func main() {
 	rename := args["rename"].(bool)
 	remove := args["remove"].(bool)
 	if split {
-		err = cmd.splitApeOrFlac(shntool, cuetag, dir, parallel, rename, remove, verbose)
+		err = cmd.SplitApeOrFlac(shntool, cuetag, dir, parallel, rename, remove, verbose)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -126,7 +128,7 @@ func main() {
 
 	//convert input file to flac
 	if len(file) != 0 {
-		cmd.fileToFlac(shntool, file, verbose)
+		cmd.FileToFlac(shntool, file, verbose)
 		return
 	}
 
@@ -135,7 +137,7 @@ func main() {
 	concat := args["concat"].(bool)
 	if len(dir) != 0 {
 		outnum := args["outnum"].(bool)
-		worked, err = cmd.dirToFlac(shntool, dir, parallel, outnum, concat, rename, remove, verbose)
+		worked, err = cmd.DirToFlac(shntool, dir, parallel, outnum, concat, rename, remove, verbose)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -144,7 +146,7 @@ func main() {
 
 	//concatenation of flac, ape, wav files by directories with conversion to flac
 	if concat {
-		err = cmd.concatFlacs(sox, dir, parallel, rename, remove, verbose, worked)
+		err = cmd.ConcatFlacs(sox, dir, parallel, rename, remove, verbose, worked)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
