@@ -1,4 +1,7 @@
 # flactool
+[![Build Status](https://github.com/vivask/flactool.git)](https://github.com/vivask/flactool.git)
+[![GitHub release](https://img.shields.io/github/v/release/vivask/flactool.svg)](https://github.com/darxkies/virtual-ip/releases/latest)
+![GitHub](https://img.shields.io/github/license/vivask/flactool.svg)
 
 Multithreaded, batch tool for converting, concatenating and splitting audio files in flac, ape, wav formats
 
@@ -9,7 +12,7 @@ To use the program, you must first install the following packages:
 - cuetools;
 - sox.
 
-# Uasage:
+## Uasage:
 
     flactool [OPTION] 
 -  -c concat all flac files in dir to one flac file
@@ -23,7 +26,7 @@ To use the program, you must first install the following packages:
 -  -R remove source after operation
 -  -v verbose
 
-# Examples:
+## Examples:
 1. Convert all ape files from ~/apedir (with subdirectories) to flac
 
     flactool -d ~/apedir 
@@ -32,8 +35,8 @@ To use the program, you must first install the following packages:
 
     flactool -s -R
 
-# Build 
-To build from source code you need make and Docker, then run the following commands:
+### Build 
+To build from source code you need run the following commands:
 
     git clone https://github.com/vivask/flactool.git
     cd flactool
