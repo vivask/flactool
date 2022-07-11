@@ -31,7 +31,9 @@ flactool [OPTION]
 
 Examples:
 1. Convert all ape files from ~/apefiles directory (with subdirectories) to flac
+
 flactool -d ~/apedir 
 
 2. All ape and wav files from the current directory (with subdirectories) are split with cue (if there is a cue file with a name similar to ape or wav) with conversion to flac. With the subsequent removal of the original ape and wav files
+
 flactool -s -R
