@@ -29,13 +29,13 @@ func apeFileToFlac(shntool, input string, verbose bool) {
 
 func apeDirToFlac(shntool, dir string, parallel uint, outnum, concat, rename, remove, verbose bool) (worked bool, err error) {
 	worked = false
-	list, err := getFilesFromDir(dir, ".ape")
+	list, err := getFilesFromDir(dir, ".ape", ".wav")
 	if err != nil {
 		return worked, fmt.Errorf("error: %w", err)
 	}
 	if len(list) == 0 {
 		if !concat {
-			return worked, fmt.Errorf("ape files not found")
+			return worked, fmt.Errorf("ape or wav files not found")
 		}
 	} else {
 

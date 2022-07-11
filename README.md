@@ -20,7 +20,7 @@ Uasage:
     -  -v verbose
 
 Examples:
-1. Convert all ape files from ~/apefiles directory (with subdirectories) to flac
+1. Convert all ape files from ~/apedir directory (with subdirectories) to flac
 
     flactool -d ~/apedir 
 

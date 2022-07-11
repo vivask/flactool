@@ -7,13 +7,14 @@ import (
 
 type FileList map[string][]string
 
-func getFilesFromDir(dir, ext string) (list []string, err error) {
+func getFilesFromDir(dir string, extSet ...string) (list []string, err error) {
 	err = filepath.Walk(dir,
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				return err
 			}
-			if !info.IsDir() && ext == filepath.Ext(path) {
+			ext := filepath.Ext(path)
+			if !info.IsDir() && isInclude(ext, extSet) {
 				list = append(list, path)
 			}
 			return nil
