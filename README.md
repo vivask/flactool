@@ -6,24 +6,24 @@ To use the program, you must first install the following packages:
 - Monkey's Audio Codec; https://github.com/fernandotcl/monkeys-audio;
 - shntool;
 - cuetools;
-- sox;
+- sox.
 
 Uasage:
 
     flactool [OPTION] 
-    -  -R remove source after operation
-    -  -c concat all flac files in dir to one flac file
-    -  -d "path"
-    -  -f "file"
-    -  -h help
-    -  -n output file name - number
-    -  -p Num core, default 4 (default 4)
-    -  -r rename ape file before convert
-    -  -s split flac or ape files in dir
-    -  -v verbose
+-  -c concat all flac files in dir to one flac file
+-  -s split flac or ape files in dir
+-  -d "path"
+-  -f "file"
+-  -h help
+-  -n output file name - number
+-  -p Num core, default 4 (default 4)
+-  -r rename ape file before convert
+-  -R remove source after operation
+-  -v verbose
 
 Examples:
-1. Convert all ape files from ~/apedir directory (with subdirectories) to flac
+1. Convert all ape files from ~/apedir (with subdirectories) to flac
 
     flactool -d ~/apedir 
 
