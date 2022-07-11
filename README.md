@@ -9,7 +9,7 @@ To use the program, you must first install the following packages:
 - cuetools;
 - sox.
 
-Uasage:
+# Uasage:
 
     flactool [OPTION] 
 -  -c concat all flac files in dir to one flac file
@@ -23,7 +23,7 @@ Uasage:
 -  -R remove source after operation
 -  -v verbose
 
-Examples:
+# Examples:
 1. Convert all ape files from ~/apedir (with subdirectories) to flac
 
     flactool -d ~/apedir 
@@ -31,3 +31,9 @@ Examples:
 2. All ape and wav files from the current directory (with subdirectories) are split with cue (if there is a cue file with a name similar to ape or wav) with conversion to flac. With the subsequent removal of the original ape and wav files
 
     flactool -s -R
+
+# Build 
+To build from source code you need make and Docker, then run the following commands:
+git clone https://github.com/vivask/flactool.git
+cd flactool
+install.sh
