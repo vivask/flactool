@@ -15,9 +15,9 @@ Uasage:
     -  -h help
     -  -n output file name - number
     -  -p Num core, default 4 (default 4)
-    -   -r rename ape file before convert
-    -   -s split flac or ape files in dir
-    -   -v verbose
+    -  -r rename ape file before convert
+    -  -s split flac or ape files in dir
+    -  -v verbose
 
 Examples:
 1. Convert all ape files from ~/apefiles directory (with subdirectories) to flac
