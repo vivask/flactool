@@ -34,6 +34,7 @@ To use the program, you must first install the following packages:
 
 # Build 
 To build from source code you need make and Docker, then run the following commands:
-git clone https://github.com/vivask/flactool.git
-cd flactool
-install.sh
+
+    git clone https://github.com/vivask/flactool.git
+    cd flactool
+    install.sh
