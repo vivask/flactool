@@ -7,6 +7,7 @@ import (
 
 type FileList map[string][]string
 
+//Recursive search for files in a given directory by a list of extensions
 func getFilesFromDir(dir string, extSet ...string) (list []string, err error) {
 	StartSpinner()
 	defer StopSpinner()
@@ -24,6 +25,7 @@ func getFilesFromDir(dir string, extSet ...string) (list []string, err error) {
 	return
 }
 
+//Generating a list of files in the FileList format
 func prepareFiles(files []string) (list FileList) {
 	list = make(FileList)
 	for _, path := range files {
@@ -44,6 +46,7 @@ func replaceExtToCue(fName string) string {
 	return fName[0:len(fName)-len(ext)] + ".cue"
 }
 
+//Checking if an element is in a set
 func isInclude(item string, set []string) bool {
 	for _, i := range set {
 		if item == i {
@@ -53,6 +56,7 @@ func isInclude(item string, set []string) bool {
 	return false
 }
 
+//Recursive search for files in a given directory according to the list of extensions if there is a cue file.
 func getSplitFilesFromDir(dir string, extSet ...string) (list []string, err error) {
 	StartSpinner()
 	defer StopSpinner()

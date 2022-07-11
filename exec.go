@@ -7,6 +7,7 @@ import (
 
 const ShellToUse = "bash"
 
+//start system process
 func Shellout(command string) (error, string, string) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer

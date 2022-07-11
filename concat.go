@@ -11,6 +11,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+//concatenation of flac, ape, wav files by directories with conversion to flac
 func concatFlacs(sox, dir string, parallel uint, rename, remove, verbose, worked bool) error {
 	list, err := getFilesFromDir(dir, ".flac")
 	if err != nil {

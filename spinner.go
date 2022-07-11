@@ -20,11 +20,13 @@ func spinner(delay time.Duration) {
 	wait <- struct{}{}
 }
 
+//start animation progress
 func StartSpinner() {
 	stopSpinner = false
 	go spinner(100 * time.Millisecond)
 }
 
+//stop animation progress
 func StopSpinner() {
 	stopSpinner = true
 	<-wait

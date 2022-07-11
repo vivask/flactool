@@ -79,17 +79,20 @@ func main() {
 	args := parseArgs()
 	help := args["help"].(bool)
 
+	//usage
 	if len(os.Args) > 1 && (os.Args[1] == "?" || help) {
 		flag.PrintDefaults()
 		return
 	}
 
+	//checking the availability of third-party packages
 	sox, shntool, cuetag, err := searchNeedUtils()
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
+	//check for incompatible arguments
 	verbose := args["verbose"].(bool)
 	file := args["file"].(string)
 	dir := args["dir"].(string)
@@ -98,7 +101,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	// current directory
+	//current directory
 	if len(file) == 0 && len(dir) == 0 {
 		dir, err = os.Getwd()
 		if err != nil {
@@ -107,6 +110,7 @@ func main() {
 		}
 	}
 
+	//split flac, ape, wav files according to cue by directories
 	split := args["split"].(bool)
 	parallel := args["parallel"].(uint)
 	rename := args["rename"].(bool)
@@ -120,11 +124,13 @@ func main() {
 		return
 	}
 
+	//convert input file to flac
 	if len(file) != 0 {
 		fileToFlac(shntool, file, verbose)
 		return
 	}
 
+	//converting input files by directories to flac
 	worked := false
 	concat := args["concat"].(bool)
 	if len(dir) != 0 {
@@ -136,6 +142,7 @@ func main() {
 		}
 	}
 
+	//concatenation of flac, ape, wav files by directories with conversion to flac
 	if concat {
 		err = concatFlacs(sox, dir, parallel, rename, remove, verbose, worked)
 		if err != nil {

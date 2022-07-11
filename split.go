@@ -12,6 +12,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+//split flac, ape, wav files according to cue by directories
 func splitApeOrFlac(shntool, cuetag, dir string, parallel uint, rename, remove, verbose bool) error {
 	files, err := getSplitFilesFromDir(dir, ".flac", ".ape", ".wav")
 	if err != nil {

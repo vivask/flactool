@@ -1,4 +1,6 @@
 # flactool
+Multithreaded, batch tool for converting, concatenating and splitting audio files in flac, ape, wav formats
+
 
 To use the program, you must first install the following packages:
 - Monkey's Audio Codec; https://github.com/fernandotcl/monkeys-audio;
