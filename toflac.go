@@ -1,13 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"context"
 	"fmt"
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 	"sync"
 
 	"golang.org/x/sync/errgroup"
@@ -39,67 +37,53 @@ func DirToFlac(shntool, dir string, parallel uint, outnum, concat, rename, remov
 		}
 	} else {
 
-		pathes, keys := prepareFiles(list)
-		for _, path := range keys {
-			fmt.Println(path)
-			for _, file := range pathes[path] {
-				fmt.Println(file)
-			}
-			fmt.Println()
-		}
+		pathes, keys := prepareFiles(list, true)
 
-		reader := bufio.NewReader(os.Stdin)
-		fmt.Println("Convert this files to flac?")
-		fmt.Println("[Yes/no]?")
-		t, _ := reader.ReadString('\n')
-		t = strings.ToLower(t)
-		if t == "y\n" || t == "yes\n" || t == "\n" {
-			StartSpinner()
-			g, _ := errgroup.WithContext(context.Background())
-			g.SetLimit(int(parallel))
-			var mu sync.Mutex
-			for path, files := range pathes {
-				path := path
-				for i, file := range files {
-					i := i + 1
-					input := fmt.Sprintf("%s/%s", path, file)
-					newName := input
-					if rename {
-						newName = fmt.Sprintf("%s/%04d.ape", path, i+1)
-						err := os.Rename(input, newName)
+		StartSpinner()
+		g, _ := errgroup.WithContext(context.Background())
+		g.SetLimit(int(parallel))
+		var mu sync.Mutex
+		for _, path := range keys {
+			path := path
+			for i, file := range pathes[path] {
+				i := i + 1
+				input := fmt.Sprintf("%s/%s", path, file)
+				newName := input
+				if rename {
+					newName = fmt.Sprintf("%s/%04d.ape", path, i+1)
+					err := os.Rename(input, newName)
+					if err != nil {
+						return worked, fmt.Errorf("rename error: %w", err)
+					}
+				}
+				g.Go(func() error {
+					task := fmt.Sprintf("%s conv -o flac \"%s\" -d \"%s\"", shntool, newName, path)
+					err, out, errout := Shellout(task)
+					if verbose {
 						if err != nil {
-							return worked, fmt.Errorf("rename error: %w", err)
+							log.Printf("error: %v\n", err)
+						}
+						fmt.Println("--- stdout ---")
+						fmt.Println(out)
+						fmt.Println("--- stderr ---")
+						fmt.Println(errout)
+					}
+
+					if err == nil {
+						mu.Lock()
+						worked = true
+						mu.Unlock()
+						if remove {
+							err = os.Remove(newName)
 						}
 					}
-					g.Go(func() error {
-						task := fmt.Sprintf("%s conv -o flac \"%s\" -d \"%s\"", shntool, newName, path)
-						err, out, errout := Shellout(task)
-						if verbose {
-							if err != nil {
-								log.Printf("error: %v\n", err)
-							}
-							fmt.Println("--- stdout ---")
-							fmt.Println(out)
-							fmt.Println("--- stderr ---")
-							fmt.Println(errout)
-						}
-
-						if err == nil {
-							mu.Lock()
-							worked = true
-							mu.Unlock()
-							if remove {
-								err = os.Remove(newName)
-							}
-						}
-						return err
-					})
-				}
+					return err
+				})
 			}
-			err = g.Wait()
-			StopSpinner()
-			return worked, err
 		}
+		err = g.Wait()
+		StopSpinner()
+		return worked, err
 	}
 	return worked, nil
 }

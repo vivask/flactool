@@ -1,7 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"log"
+	"os"
+
+	"golang.org/x/sync/errgroup"
 )
 
 //concatenation of flac, ape, wav files by directories with conversion to flac
@@ -14,25 +19,15 @@ func ConcatFlacs(sox, dir string, parallel uint, rename, remove, verbose, worked
 		return fmt.Errorf("flac files not found")
 	}
 
-	pathes, keys := prepareFiles(list)
-	for _, path := range keys {
-		fmt.Println(path)
-		for _, file := range pathes[path] {
-			fmt.Println(file)
-		}
-		fmt.Println()
-	}
+	pathes, keys := prepareFiles(list, false)
 
-	/*StartSpinner()
+	StartSpinner()
 	g, _ := errgroup.WithContext(context.Background())
 	g.SetLimit(int(parallel))
 	cdNum := 1
-	for path, files := range pathes {
-		if len(files) < 2 {
-			continue
-		}
+	for _, path := range keys {
 		path := path
-		files := files
+		files := pathes[path]
 		cmd := fmt.Sprintf("%s -S", sox)
 		input := ""
 		for i, file := range files {
@@ -85,7 +80,7 @@ func ConcatFlacs(sox, dir string, parallel uint, rename, remove, verbose, worked
 		})
 	}
 	err = g.Wait()
-	StopSpinner()*/
+	StopSpinner()
 	return err
 
 }
