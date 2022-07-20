@@ -14,10 +14,10 @@ func ConcatFlacs(sox, dir string, parallel uint, rename, remove, verbose, worked
 		return fmt.Errorf("flac files not found")
 	}
 
-	pathes := prepareFiles(list)
-	for path, files := range pathes {
+	pathes, keys := prepareFiles(list)
+	for _, path := range keys {
 		fmt.Println(path)
-		for _, file := range files {
+		for _, file := range pathes[path] {
 			fmt.Println(file)
 		}
 		fmt.Println()

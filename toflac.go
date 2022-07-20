@@ -39,10 +39,10 @@ func DirToFlac(shntool, dir string, parallel uint, outnum, concat, rename, remov
 		}
 	} else {
 
-		pathes := prepareFiles(list)
-		for path, files := range pathes {
+		pathes, keys := prepareFiles(list)
+		for _, path := range keys {
 			fmt.Println(path)
-			for _, file := range files {
+			for _, file := range pathes[path] {
 				fmt.Println(file)
 			}
 			fmt.Println()

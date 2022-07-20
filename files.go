@@ -30,7 +30,8 @@ func getFilesFromDir(dir string, extSet ...string) (list []string, err error) {
 }
 
 //Generating a list of files in the FileList format
-func prepareFiles(files []string) (list FileList) {
+func prepareFiles(files []string) (list FileList, keys []string) {
+	var rm []string
 	list = make(FileList)
 	for _, path := range files {
 		dir := filepath.Dir(path)
@@ -38,13 +39,24 @@ func prepareFiles(files []string) (list FileList) {
 		list[dir] = append(list[dir], name)
 	}
 
-	keys := make([]string, 0, len(list))
+	// mark dirs with one file
+	for path, files := range list {
+		if len(files) < 2 {
+			rm = append(rm, path)
+		}
+	}
+	// remove dirs with one file
+	for _, r := range rm {
+		delete(list, r)
+	}
+
+	keys = make([]string, 0, len(list))
 	for k := range list {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
 
-	var rm []string
+	rm = rm[:0]
 	for _, path := range keys {
 		fmt.Println(path)
 		for _, file := range list[path] {
@@ -65,6 +77,11 @@ func prepareFiles(files []string) (list FileList) {
 	for _, r := range rm {
 		delete(list, r)
 	}
+	keys = make([]string, 0, len(list))
+	for k := range list {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
 
 	return
 }
