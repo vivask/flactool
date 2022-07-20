@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bufio"
+	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type FileList map[string][]string
@@ -33,6 +36,29 @@ func prepareFiles(files []string) (list FileList) {
 		name := filepath.Base(path)
 		list[dir] = append(list[dir], name)
 	}
+
+	var rm []string
+	for path, files := range list {
+		fmt.Println(path)
+		for _, file := range files {
+			fmt.Println(file)
+		}
+		fmt.Println()
+		t := "y\n"
+		reader := bufio.NewReader(os.Stdin)
+		fmt.Println("Use this files?")
+		fmt.Println("[Yes/no]?")
+		t, _ = reader.ReadString('\n')
+		t = strings.ToLower(t)
+		if t == "n\n" || t == "no\n" {
+			rm = append(rm, path)
+		}
+	}
+
+	for _, r := range rm {
+		delete(list, r)
+	}
+
 	return
 }
 
