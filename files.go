@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 )
 
@@ -37,10 +38,16 @@ func prepareFiles(files []string) (list FileList) {
 		list[dir] = append(list[dir], name)
 	}
 
+	keys := make([]string, 0, len(list))
+	for k := range list {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
 	var rm []string
-	for path, files := range list {
+	for _, path := range keys {
 		fmt.Println(path)
-		for _, file := range files {
+		for _, file := range list[path] {
 			fmt.Println(file)
 		}
 		fmt.Println()
@@ -50,7 +57,7 @@ func prepareFiles(files []string) (list FileList) {
 		fmt.Println("[Yes/no]?")
 		t, _ = reader.ReadString('\n')
 		t = strings.ToLower(t)
-		if t == "n\n" || t == "no\n" {
+		if !(t == "y\n" || t == "yes\n" || t == "\n") {
 			rm = append(rm, path)
 		}
 	}
