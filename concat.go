@@ -44,8 +44,8 @@ func ConcatFlacs(sox, dir string, parallel uint, rename, remove, verbose bool) e
 			}
 			input = fmt.Sprintf("%s \"%s/%s\" ", input, path, newName)
 		}
-		out := fmt.Sprintf("\"%s/%s.flac\"", path, getLastDir(path))
-		cmd = fmt.Sprintf("%s %s%s", cmd, input, out)
+		out := fmt.Sprintf("%s/%s.flac", path, getLastDir(path))
+		cmd = fmt.Sprintf("%s %s%s", cmd, input, quotes(out))
 		if verbose {
 			fmt.Println()
 			fmt.Println(cmd)
@@ -78,7 +78,7 @@ func ConcatFlacs(sox, dir string, parallel uint, rename, remove, verbose bool) e
 					}
 				}
 				//move result to parent dir
-				err = os.Rename(out, getParentPath(out))
+				err = os.Rename(quotes(out), quotes(getParentPath(out)))
 				if err != nil {
 					return err
 				}
@@ -110,4 +110,9 @@ func getParentPath(path string) string {
 		return fmt.Sprintf("/%s", filepath.Base(path))
 	}
 	return fmt.Sprintf("%s/%s", parent, filepath.Base(path))
+}
+
+// return "src"
+func quotes(src string) string {
+	return fmt.Sprintf("\"%s\"", src)
 }

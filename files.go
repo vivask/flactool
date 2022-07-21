@@ -93,11 +93,13 @@ func prepareFiles(files []string, one bool) (list FileList, keys []string) {
 	return
 }
 
+// replace file extension to flac
 func replaceExtToFlac(fName string) string {
 	ext := filepath.Ext(fName)
 	return fName[0:len(fName)-len(ext)] + ".flac"
 }
 
+// replace file extension to cue
 func replaceExtToCue(fName string) string {
 	ext := filepath.Ext(fName)
 	return fName[0:len(fName)-len(ext)] + ".cue"
