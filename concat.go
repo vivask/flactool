@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"golang.org/x/sync/errgroup"
@@ -43,8 +44,8 @@ func ConcatFlacs(sox, dir string, parallel uint, rename, remove, verbose bool) e
 			}
 			input = fmt.Sprintf("%s \"%s/%s\" ", input, path, newName)
 		}
-
-		cmd = fmt.Sprintf("%s %s\"%s/%s.flac\"", cmd, input, path, getLastDir(path))
+		out := fmt.Sprintf("\"%s/%s.flac\"", path, getLastDir(path))
+		cmd = fmt.Sprintf("%s %s%s", cmd, input, out)
 		if verbose {
 			fmt.Println()
 			fmt.Println(cmd)
@@ -62,6 +63,7 @@ func ConcatFlacs(sox, dir string, parallel uint, rename, remove, verbose bool) e
 				fmt.Println(errout)
 			}
 			if err == nil {
+				//rename and remove source files
 				for i, file := range files {
 					newName := file
 					if rename {
@@ -75,6 +77,11 @@ func ConcatFlacs(sox, dir string, parallel uint, rename, remove, verbose bool) e
 						}
 					}
 				}
+				//move result to parent dir
+				err = os.Rename(out, getParentPath(out))
+				if err != nil {
+					return err
+				}
 			}
 			return err
 		})
@@ -85,6 +92,7 @@ func ConcatFlacs(sox, dir string, parallel uint, rename, remove, verbose bool) e
 
 }
 
+// return name last dir
 func getLastDir(path string) string {
 	split := strings.Split(path, "/")
 	cnt := len(split)
@@ -92,4 +100,14 @@ func getLastDir(path string) string {
 		return split[cnt-1]
 	}
 	return path
+}
+
+// return previous dir file path
+func getParentPath(path string) string {
+	dir := filepath.Dir(path)
+	parent := filepath.Dir(dir)
+	if parent == "/" {
+		return fmt.Sprintf("/%s", filepath.Base(path))
+	}
+	return fmt.Sprintf("%s/%s", parent, filepath.Base(path))
 }
