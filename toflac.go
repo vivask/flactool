@@ -24,7 +24,7 @@ func FileToFlac(shntool, input string, verbose bool) {
 	}
 }
 
-func DirToFlac(shntool, dir string, parallel uint, outnum, concat, rename, remove, verbose bool) (err error) {
+func DirToFlac(shntool, dir string, parallel uint, concat, remove, verbose bool) (err error) {
 	list, err := getFilesFromDir(dir, ".ape", ".wav")
 	if len(list) == 0 {
 		if !concat {
@@ -39,19 +39,10 @@ func DirToFlac(shntool, dir string, parallel uint, outnum, concat, rename, remov
 		g.SetLimit(int(parallel))
 		for _, path := range keys {
 			path := path
-			for i, file := range pathes[path] {
-				i := i + 1
+			for _, file := range pathes[path] {
 				input := fmt.Sprintf("%s/%s", path, file)
-				newName := input
-				if rename {
-					newName = fmt.Sprintf("%s/%04d.ape", path, i+1)
-					err := os.Rename(input, newName)
-					if err != nil {
-						return fmt.Errorf("rename error: %w", err)
-					}
-				}
 				g.Go(func() error {
-					task := fmt.Sprintf("%s conv -o flac \"%s\" -d \"%s\"", shntool, newName, path)
+					task := fmt.Sprintf("%s conv -o flac \"%s\" -d \"%s\"", shntool, input, path)
 					err, out, errout := Shellout(task)
 					if verbose {
 						if err != nil {
@@ -65,7 +56,7 @@ func DirToFlac(shntool, dir string, parallel uint, outnum, concat, rename, remov
 
 					if err == nil {
 						if remove {
-							err = os.Remove(newName)
+							err = os.Remove(input)
 						}
 					}
 					return err

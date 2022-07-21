@@ -136,3 +136,23 @@ func getSplitFilesFromDir(dir string, extSet ...string) (list []string, err erro
 		})
 	return
 }
+
+// return name last dir
+func getLastDir(path string) string {
+	split := strings.Split(path, "/")
+	cnt := len(split)
+	if cnt > 0 {
+		return split[cnt-1]
+	}
+	return path
+}
+
+// return previous dir file path
+func getParentPath(path string) string {
+	dir := filepath.Dir(path)
+	parent := filepath.Dir(dir)
+	if parent == "/" {
+		return fmt.Sprintf("/%s", filepath.Base(path))
+	}
+	return fmt.Sprintf("%s/%s", parent, filepath.Base(path))
+}

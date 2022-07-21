@@ -18,16 +18,14 @@ type Arguments map[string]interface{}
 
 func parseArgs() Arguments {
 	var fName, dirName string
-	var numNameOut, concat, split, rename, remove, verbose, help bool
+	var concat, split, remove, verbose, help bool
 	var parallel uint
 	flag.StringVar(&fName, "f", "", `-f "file"`)
 	flag.StringVar(&dirName, "d", "", `-d "path"`)
-	flag.UintVar(&parallel, "p", 4, "-p Num core, default 4")
-	flag.BoolVar(&numNameOut, "n", false, "-n output file name - number")
+	flag.UintVar(&parallel, "p", 4, "-p num cpu cores, default 4")
 	flag.BoolVar(&concat, "c", false, "-c concat all flac files in dir to one flac file")
 	flag.BoolVar(&split, "s", false, "-s split flac or ape files in dir")
-	flag.BoolVar(&rename, "r", false, "-r rename ape file before convert")
-	flag.BoolVar(&remove, "R", false, "-R remove source after operation")
+	flag.BoolVar(&remove, "r", false, "-r remove source after operation")
 	flag.BoolVar(&verbose, "v", false, "-v verbose")
 	flag.BoolVar(&help, "h", false, "-h help")
 	flag.Parse()
@@ -36,10 +34,8 @@ func parseArgs() Arguments {
 	args["file"] = fName
 	args["dir"] = dirName
 	args["parallel"] = parallel
-	args["outnum"] = numNameOut
 	args["concat"] = concat
 	args["split"] = split
-	args["rename"] = rename
 	args["remove"] = remove
 	args["verbose"] = verbose
 	args["help"] = help
@@ -113,10 +109,9 @@ func main() {
 	//split flac, ape, wav files according to cue by directories
 	split := args["split"].(bool)
 	parallel := args["parallel"].(uint)
-	rename := args["rename"].(bool)
 	remove := args["remove"].(bool)
 	if split {
-		err = SplitApeOrFlac(shntool, cuetag, dir, parallel, rename, remove, verbose)
+		err = SplitApeOrFlac(shntool, cuetag, dir, parallel, remove, verbose)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -133,8 +128,7 @@ func main() {
 	//converting input files by directories to flac
 	concat := args["concat"].(bool)
 	if len(dir) != 0 {
-		outnum := args["outnum"].(bool)
-		err = DirToFlac(shntool, dir, parallel, outnum, concat, rename, remove, verbose)
+		err = DirToFlac(shntool, dir, parallel, concat, remove, verbose)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -143,7 +137,7 @@ func main() {
 
 	//concatenation of flac, ape, wav files by directories with conversion to flac
 	if concat {
-		err = ConcatFlacs(sox, dir, parallel, rename, remove, verbose)
+		err = ConcatFlacs(sox, dir, parallel, remove, verbose)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
