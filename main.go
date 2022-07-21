@@ -8,6 +8,7 @@ import (
 )
 
 const (
+	FFMPEG     = "ffmpeg"
 	SHNTOOL    = "shntool"
 	SOX        = "sox"
 	CUETAG     = "cuetag"
@@ -42,7 +43,7 @@ func parseArgs() Arguments {
 	return args
 }
 
-func searchNeedPkg() (sox, shntool, cuetag string, err error) {
+func searchNeedPkg() (sox, shntool, cuetag, ffmpeg string, err error) {
 	pathes := strings.Split(SEARCHPATH, " ")
 	for _, path := range pathes {
 		fName := fmt.Sprintf("%s/%s", path, SOX)
@@ -57,6 +58,10 @@ func searchNeedPkg() (sox, shntool, cuetag string, err error) {
 		if _, exist := os.Stat(fName); exist == nil {
 			cuetag = fName
 		}
+		fName = fmt.Sprintf("%s/%s", path, FFMPEG)
+		if _, exist := os.Stat(fName); exist == nil {
+			ffmpeg = fName
+		}
 	}
 	if len(shntool) == 0 {
 		err = fmt.Errorf("shntool not found. need install shntool")
@@ -66,6 +71,9 @@ func searchNeedPkg() (sox, shntool, cuetag string, err error) {
 	}
 	if len(cuetag) == 0 {
 		err = fmt.Errorf("cuetag not found. need install cuetag")
+	}
+	if len(ffmpeg) == 0 {
+		err = fmt.Errorf("ffmpeg not found. need install ffmpeg")
 	}
 
 	return
@@ -82,7 +90,7 @@ func main() {
 	}
 
 	//checking the availability of third-party packages
-	sox, shntool, cuetag, err := searchNeedPkg()
+	sox, shntool, cuetag, ffmpeg, err := searchNeedPkg()
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -124,14 +132,14 @@ func main() {
 
 	//convert input file to flac
 	if len(file) != 0 {
-		FileToFlac(shntool, file, verbose)
+		FileToFlac(shntool, ffmpeg, file, verbose)
 		return
 	}
 
 	//converting input files by directories to flac
 	concat := args["concat"].(bool)
 	if len(dir) != 0 {
-		err = DirToFlac(shntool, dir, parallel, concat, remove, verbose)
+		err = DirToFlac(shntool, ffmpeg, dir, parallel, concat, remove, verbose)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -146,5 +154,4 @@ func main() {
 			os.Exit(1)
 		}
 	}
-
 }

@@ -9,20 +9,29 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func FileToFlac(shntool, input string, verbose bool) {
-	task := fmt.Sprintf("%s conv -o flac \"%s\" -d \"%s\"", shntool, input, filepath.Dir(input))
-	err, out, errout := Shellout(task)
+func FileToFlac(shntool, ffmpeg, input string, verbose bool) {
+	var cmd string
+	ext := filepath.Ext(input)
+
+	if ext == ".dsf" {
+		out := replaceExtToFlac(input)
+		cmd = fmt.Sprintf("%s -i \"%s\" -af \"lowpass=24000, volume=6dB\" -sample_fmt s32 -ar 48000 \"%s\"", ffmpeg, input, out)
+	} else {
+		cmd = fmt.Sprintf("%s conv -o flac \"%s\" -d \"%s\"", shntool, input, filepath.Dir(input))
+	}
+	err, out, errout := Shellout(cmd)
 	execVerbose(err, out, errout, verbose)
 }
 
-func DirToFlac(shntool, dir string, parallel uint, concat, remove, verbose bool) (err error) {
-	list, err := getFilesFromDir(dir, ".ape", ".wav")
+func DirToFlac(shntool, ffmpeg, dir string, parallel uint, concat, remove, verbose bool) (err error) {
+	list, err := getFilesFromDir(dir, ".ape", ".wav", ".dsf")
 	if len(list) == 0 {
 		if !concat {
-			return fmt.Errorf("ape or wav files not found")
+			return fmt.Errorf("audio files not found")
 		}
 	} else {
 
+		ext := filepath.Ext(list[0])
 		pathes, keys := prepareFiles(list, true)
 
 		StartSpinner()
@@ -33,8 +42,14 @@ func DirToFlac(shntool, dir string, parallel uint, concat, remove, verbose bool)
 			for _, file := range pathes[path] {
 				input := fmt.Sprintf("%s/%s", path, file)
 				g.Go(func() error {
-					task := fmt.Sprintf("%s conv -o flac \"%s\" -d \"%s\"", shntool, input, path)
-					err, stdout, errout := Shellout(task)
+					var cmd string
+					if ext == ".dsf" {
+						out := replaceExtToFlac(input)
+						cmd = fmt.Sprintf("%s -i \"%s\" -af \"lowpass=24000, volume=6dB\" -sample_fmt s32 -ar 48000 \"%s\"", ffmpeg, input, out)
+					} else {
+						cmd = fmt.Sprintf("%s conv -o flac \"%s\" -d \"%s\"", shntool, input, path)
+					}
+					err, stdout, errout := Shellout(cmd)
 					execVerbose(err, stdout, errout, verbose)
 
 					if err == nil {
