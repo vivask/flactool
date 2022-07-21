@@ -11,7 +11,7 @@ import (
 )
 
 //concatenation of flac, ape, wav files by directories with conversion to flac
-func ConcatFlacs(sox, dir string, parallel uint, rename, remove, verbose, worked bool) error {
+func ConcatFlacs(sox, dir string, parallel uint, rename, remove, verbose bool) error {
 	list, err := getFilesFromDir(dir, ".flac")
 	if err != nil {
 		return fmt.Errorf("error: %w", err)
@@ -89,7 +89,7 @@ func getLastDir(path string) string {
 	split := strings.Split(path, "/")
 	cnt := len(split)
 	if cnt > 0 {
-		return split[len(split)-1]
+		return split[cnt-1]
 	}
 	return path
 }

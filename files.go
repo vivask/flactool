@@ -33,6 +33,7 @@ func getFilesFromDir(dir string, extSet ...string) (list []string, err error) {
 func prepareFiles(files []string, one bool) (list FileList, keys []string) {
 	var rm []string
 	list = make(FileList)
+	//copy from slice to map
 	for _, path := range files {
 		dir := filepath.Dir(path)
 		name := filepath.Base(path)
@@ -52,6 +53,7 @@ func prepareFiles(files []string, one bool) (list FileList, keys []string) {
 		}
 	}
 
+	//create sort slice for map
 	keys = make([]string, 0, len(list))
 	for k := range list {
 		keys = append(keys, k)
@@ -76,9 +78,12 @@ func prepareFiles(files []string, one bool) (list FileList, keys []string) {
 		}
 	}
 
+	//delete not used
 	for _, r := range rm {
 		delete(list, r)
 	}
+
+	//create sort slice for map
 	keys = make([]string, 0, len(list))
 	for k := range list {
 		keys = append(keys, k)
