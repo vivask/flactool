@@ -47,11 +47,11 @@ func ConcatFlacs(sox, dir string, dirs []string, parallel uint, remove, verbose 
 
 		out := fmt.Sprintf("%s/%s.flac", path, getLastDir(path))
 		cmd = fmt.Sprintf("%s %s%s", cmd, input, quotes(out))
-		cmdVerbose(cmd, true)
+		cmdVerbose(cmd, verbose)
 		g.Go(func() error {
 			//concat shntool
 			err, stdout, errout := Shellout(cmd)
-			execVerbose(err, stdout, errout, true)
+			execVerbose(err, stdout, errout, verbose)
 			if err != nil {
 				return err
 			}
