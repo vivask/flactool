@@ -41,8 +41,8 @@ func SplitApeOrFlac(shntool, cuetag, dir string, parallel uint, remove, verbose 
 			cmd := shntool + " split -f \"" + cue + "\" -o flac -t \"%n %t\" " + "\"" + file + "\" -d " + "\"" + out + "\""
 			cmdVerbose(cmd, verbose)
 			g.Go(func() error {
-				err, out, errout := Shellout(cmd)
-				execVerbose(err, out, errout, verbose)
+				err, stdout, errout := Shellout(cmd)
+				execVerbose(err, stdout, errout, verbose)
 				if err == nil {
 					if remove {
 						err = os.Remove(file)
@@ -52,8 +52,8 @@ func SplitApeOrFlac(shntool, cuetag, dir string, parallel uint, remove, verbose 
 					}
 					cmd := fmt.Sprintf("%s \"%s\" \"%s/*%s\"", cuetag, cue, filepath.Dir(file), filepath.Ext(file))
 					cmdVerbose(cmd, verbose)
-					err, out, errout := Shellout(cmd)
-					execVerbose(err, out, errout, verbose)
+					err, stdout, errout := Shellout(cmd)
+					execVerbose(err, stdout, errout, verbose)
 				}
 				return err
 			})

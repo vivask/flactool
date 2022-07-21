@@ -34,8 +34,8 @@ func DirToFlac(shntool, dir string, parallel uint, concat, remove, verbose bool)
 				input := fmt.Sprintf("%s/%s", path, file)
 				g.Go(func() error {
 					task := fmt.Sprintf("%s conv -o flac \"%s\" -d \"%s\"", shntool, input, path)
-					err, out, errout := Shellout(task)
-					execVerbose(err, out, errout, verbose)
+					err, stdout, errout := Shellout(task)
+					execVerbose(err, stdout, errout, verbose)
 
 					if err == nil {
 						if remove {

@@ -20,10 +20,8 @@ To use the program, you must first install the following packages:
 -  -d "path"
 -  -f "file"
 -  -h help
--  -n output file name - number
--  -p Num core, default 4 (default 4)
--  -r rename ape file before convert
--  -R remove source after operation
+-  -p num core, default 4 (default 4)
+-  -r remove source after operation
 -  -v verbose
 
 ## Examples:

@@ -40,20 +40,18 @@ func ConcatFlacs(sox, dir string, parallel uint, remove, verbose bool) error {
 		cmdVerbose(cmd, verbose)
 		g.Go(func() error {
 			//concat shntool
-			err, out, errout := Shellout(cmd)
-			execVerbose(err, out, errout, verbose)
+			err, stdout, errout := Shellout(cmd)
+			execVerbose(err, stdout, errout, verbose)
 			if err != nil {
-				execVerbose(err, out, errout, true)
 				return err
 			}
 
 			//move result to parent dir
 			cmd = fmt.Sprintf("mv %s %s", quotes(out), quotes(getParentPath(out)))
 			cmdVerbose(cmd, verbose)
-			err, out, errout = Shellout(cmd)
-			execVerbose(err, out, errout, verbose)
+			err, stdout, errout = Shellout(cmd)
+			execVerbose(err, stdout, errout, verbose)
 			if err != nil {
-				fmt.Printf("mv error: %v", err)
 				return err
 			}
 
@@ -71,19 +69,7 @@ func ConcatFlacs(sox, dir string, parallel uint, remove, verbose bool) error {
 			return nil
 		})
 	}
-	err = g.Wait()
-	if err != nil {
-		return err
-	}
-	//move result to parent dir
-	/*for _, path := range keys {
-		out := fmt.Sprintf("%s/%s.flac", path, getLastDir(path))
-		cmd := fmt.Sprintf("mv %s %s", quotes(out), quotes(getParentPath(out)))
-		cmdVerbose(cmd, verbose)
-		err, out, errout := Shellout(cmd)
-		execVerbose(err, out, errout, verbose)
-	}*/
-	return nil
+	return g.Wait()
 }
 
 // return "src"
