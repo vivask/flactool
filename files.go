@@ -69,8 +69,7 @@ func prepareFiles(files []string, one bool) (list FileList, keys []string) {
 		fmt.Println()
 		t := "y\n"
 		reader := bufio.NewReader(os.Stdin)
-		fmt.Println("Use this files?")
-		fmt.Println("[Yes/no]?")
+		fmt.Println("Use this files [Yes/no]?")
 		t, _ = reader.ReadString('\n')
 		t = strings.ToLower(t)
 		if !(t == "y\n" || t == "yes\n" || t == "\n") {
