@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"context"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -40,22 +39,10 @@ func SplitApeOrFlac(shntool, cuetag, dir string, parallel uint, remove, verbose 
 			cue := replaceExtToCue(file)
 			out := filepath.Dir(file)
 			cmd := shntool + " split -f \"" + cue + "\" -o flac -t \"%n %t\" " + "\"" + file + "\" -d " + "\"" + out + "\""
-			if verbose {
-				fmt.Println()
-				fmt.Println(cmd)
-				fmt.Println()
-			}
+			cmdVerbose(cmd, verbose)
 			g.Go(func() error {
 				err, out, errout := Shellout(cmd)
-				if verbose {
-					if err != nil {
-						log.Printf("error: %v\n", err)
-					}
-					fmt.Println("--- stdout ---")
-					fmt.Println(out)
-					fmt.Println("--- stderr ---")
-					fmt.Println(errout)
-				}
+				execVerbose(err, out, errout, verbose)
 				if err == nil {
 					if remove {
 						err = os.Remove(file)
@@ -64,12 +51,9 @@ func SplitApeOrFlac(shntool, cuetag, dir string, parallel uint, remove, verbose 
 						}
 					}
 					cmd := fmt.Sprintf("%s \"%s\" \"%s/*%s\"", cuetag, cue, filepath.Dir(file), filepath.Ext(file))
-					if verbose {
-						fmt.Println()
-						fmt.Println(cmd)
-						fmt.Println()
-					}
-					err, _, _ = Shellout(cmd)
+					cmdVerbose(cmd, verbose)
+					err, out, errout := Shellout(cmd)
+					execVerbose(err, out, errout, verbose)
 				}
 				return err
 			})

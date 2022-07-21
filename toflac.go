@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 
@@ -13,15 +12,7 @@ import (
 func FileToFlac(shntool, input string, verbose bool) {
 	task := fmt.Sprintf("%s conv -o flac \"%s\" -d \"%s\"", shntool, input, filepath.Dir(input))
 	err, out, errout := Shellout(task)
-	if verbose {
-		if err != nil {
-			log.Printf("error: %v\n", err)
-		}
-		fmt.Println("--- stdout ---")
-		fmt.Println(out)
-		fmt.Println("--- stderr ---")
-		fmt.Println(errout)
-	}
+	execVerbose(err, out, errout, verbose)
 }
 
 func DirToFlac(shntool, dir string, parallel uint, concat, remove, verbose bool) (err error) {
@@ -44,15 +35,7 @@ func DirToFlac(shntool, dir string, parallel uint, concat, remove, verbose bool)
 				g.Go(func() error {
 					task := fmt.Sprintf("%s conv -o flac \"%s\" -d \"%s\"", shntool, input, path)
 					err, out, errout := Shellout(task)
-					if verbose {
-						if err != nil {
-							log.Printf("error: %v\n", err)
-						}
-						fmt.Println("--- stdout ---")
-						fmt.Println(out)
-						fmt.Println("--- stderr ---")
-						fmt.Println(errout)
-					}
+					execVerbose(err, out, errout, verbose)
 
 					if err == nil {
 						if remove {

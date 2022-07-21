@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
 
 	"golang.org/x/sync/errgroup"
@@ -37,22 +36,10 @@ func ConcatFlacs(sox, dir string, parallel uint, remove, verbose bool) error {
 
 		out := fmt.Sprintf("%s/%s.flac", path, getLastDir(path))
 		cmd = fmt.Sprintf("%s %s%s", cmd, input, quotes(out))
-		if verbose {
-			fmt.Println()
-			fmt.Println(cmd)
-			fmt.Println()
-		}
+		cmdVerbose(cmd, verbose)
 		g.Go(func() error {
-			/*err, out, errout := Shellout(cmd)
-			if verbose {
-				if err != nil {
-					log.Printf("error: %v\n", err)
-				}
-				fmt.Println("--- stdout ---")
-				fmt.Println(out)
-				fmt.Println("--- stderr ---")
-				fmt.Println(errout)
-			}*/
+			err, out, errout := Shellout(cmd)
+			execVerbose(err, out, errout, verbose)
 			if err == nil {
 				//remove source files
 				for _, file := range files {
@@ -66,21 +53,9 @@ func ConcatFlacs(sox, dir string, parallel uint, remove, verbose bool) error {
 				}
 				//move result to parent dir
 				cmd = fmt.Sprintf("mv %s %s", quotes(out), quotes(getParentPath(out)))
-				if verbose {
-					fmt.Println()
-					fmt.Println(cmd)
-					fmt.Println()
-				}
+				cmdVerbose(cmd, verbose)
 				err, out, errout := Shellout(cmd)
-				if verbose {
-					if err != nil {
-						log.Printf("error: %v\n", err)
-					}
-					fmt.Println("--- stdout ---")
-					fmt.Println(out)
-					fmt.Println("--- stderr ---")
-					fmt.Println(errout)
-				}
+				execVerbose(err, out, errout, verbose)
 			}
 			return err
 		})
