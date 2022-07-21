@@ -97,9 +97,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	//create spinner
-	NewSpinner()
-
 	//current directory
 	if len(file) == 0 && len(dir) == 0 {
 		dir, err = os.Getwd()

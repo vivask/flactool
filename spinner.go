@@ -1,15 +1,15 @@
 package main
 
 import (
+	"fmt"
+	"os"
+	"sync"
 	"time"
-
-	"github.com/briandowns/spinner"
 )
 
-var s *spinner.Spinner
-
-/*var stopSpinner bool
+var stopSpinner bool
 var wait chan struct{} = make(chan struct{})
+var wg sync.WaitGroup
 
 func spinner(delay time.Duration) {
 	for !stopSpinner {
@@ -24,6 +24,7 @@ func spinner(delay time.Duration) {
 
 //start animation progress
 func StartSpinner() {
+	wg.Add(1)
 	stopSpinner = false
 	go spinner(100 * time.Millisecond)
 }
@@ -32,7 +33,11 @@ func StartSpinner() {
 func StopSpinner() {
 	stopSpinner = true
 	<-wait
-}*/
+	wg.Wait()
+}
+
+/*
+var s *spinner.Spinner
 
 func NewSpinner() {
 	s = spinner.New(spinner.CharSets[9], 100*time.Millisecond)
@@ -46,4 +51,4 @@ func StartSpinner() {
 //stop animation progress
 func StopSpinner() {
 	s.Stop()
-}
+}*/
