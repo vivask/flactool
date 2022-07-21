@@ -21,6 +21,7 @@ func ConcatFlacs(sox, dir string, parallel uint, remove, verbose bool) error {
 	pathes, keys := prepareFiles(list, false)
 
 	StartSpinner()
+	defer StopSpinner()
 	g, _ := errgroup.WithContext(context.Background())
 	g.SetLimit(int(parallel))
 	for _, path := range keys {
@@ -52,17 +53,26 @@ func ConcatFlacs(sox, dir string, parallel uint, remove, verbose bool) error {
 					}
 				}
 				//move result to parent dir
-				cmd = fmt.Sprintf("mv %s %s", quotes(out), quotes(getParentPath(out)))
+				/*cmd = fmt.Sprintf("mv %s %s", quotes(out), quotes(getParentPath(out)))
 				cmdVerbose(cmd, verbose)
 				err, out, errout := Shellout(cmd)
-				execVerbose(err, out, errout, verbose)
+				execVerbose(err, out, errout, verbose)*/
 			}
 			return err
 		})
 	}
 	err = g.Wait()
-	StopSpinner()
-	return err
+	if err != nil {
+		return err
+	}
+	for _, path := range keys {
+		out := fmt.Sprintf("%s/%s.flac", path, getLastDir(path))
+		err := os.Rename(quotes(out), quotes(getParentPath(out)))
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // return "src"
