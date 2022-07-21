@@ -49,7 +49,7 @@ func DirToFlac(shntool, ffmpeg, dir string, parallel uint, concat, remove, verbo
 					} else {
 						cmd = fmt.Sprintf("%s conv -o flac \"%s\" -d \"%s\"", shntool, input, path)
 					}
-					cmdVerbose(cmd, true)
+					cmdVerbose(cmd, verbose)
 					err, stdout, errout := Shellout(cmd)
 					execVerbose(err, stdout, errout, verbose)
 
