@@ -15,7 +15,7 @@ func FileToFlac(shntool, ffmpeg, input string, verbose bool) {
 
 	if ext == ".dsf" {
 		out := replaceExtToFlac(input)
-		cmd = fmt.Sprintf("%s -i \"%s\" -af \"lowpass=24000, volume=6dB\" -sample_fmt s32 -ar 48000 \"%s\"", ffmpeg, input, out)
+		cmd = fmt.Sprintf("%s -i \"%s\" -af \"lowpass=24000, volume=6dB\" -sample_fmt s32 -ar 96000 \"%s\"", ffmpeg, input, out)
 	} else {
 		cmd = fmt.Sprintf("%s conv -o flac \"%s\" -d \"%s\"", shntool, input, filepath.Dir(input))
 	}
@@ -45,7 +45,7 @@ func DirToFlac(shntool, ffmpeg, dir string, parallel uint, concat, remove, verbo
 					var cmd string
 					if ext == ".dsf" {
 						out := replaceExtToFlac(input)
-						cmd = fmt.Sprintf("%s -i \"%s\" -af \"lowpass=24000, volume=6dB\" -sample_fmt s32 -ar 48000 \"%s\"", ffmpeg, input, out)
+						cmd = fmt.Sprintf("%s -i \"%s\" -af \"lowpass=24000, volume=6dB\" -sample_fmt s32 -ar 96000 \"%s\"", ffmpeg, input, out)
 					} else {
 						cmd = fmt.Sprintf("%s conv -o flac \"%s\" -d \"%s\"", shntool, input, path)
 					}
