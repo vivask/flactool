@@ -41,9 +41,8 @@ func getFilesFromDirs(dirs []string, extSet ...string) (list FileList, keys []st
 		for _, info := range files {
 			ext := filepath.Ext(info.Name())
 			if !info.IsDir() && isInclude(ext, extSet) {
-				path := fmt.Sprintf("%s/%s", dir, info.Name())
-				list[dir] = append(list[dir], path)
-				fmt.Printf("%s\n", path)
+				//path := fmt.Sprintf("%s/%s", dir, info.Name())
+				list[dir] = append(list[dir], info.Name())
 			}
 		}
 	}

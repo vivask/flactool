@@ -38,7 +38,6 @@ func ConcatFlacs(sox, dir string, dirs []string, parallel uint, remove, verbose 
 		path := path
 		files := pathes[path]
 		cmd := fmt.Sprintf("%s -S", sox)
-		fmt.Printf("Files: %d", len(files))
 
 		//create list input files
 		input := ""
