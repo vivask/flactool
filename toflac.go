@@ -31,7 +31,6 @@ func DirToFlac(shntool, ffmpeg, dir string, parallel uint, concat, remove, verbo
 		}
 	} else {
 
-		ext := filepath.Ext(list[0])
 		pathes, dirs := prepareFiles(list, true)
 
 		StartSpinner()
@@ -41,6 +40,7 @@ func DirToFlac(shntool, ffmpeg, dir string, parallel uint, concat, remove, verbo
 			path := path
 			for _, file := range pathes[path] {
 				input := fmt.Sprintf("%s/%s", path, file)
+				ext := filepath.Ext(file)
 				g.Go(func() error {
 					var cmd string
 					if ext == ".dsf" {
@@ -49,6 +49,7 @@ func DirToFlac(shntool, ffmpeg, dir string, parallel uint, concat, remove, verbo
 					} else {
 						cmd = fmt.Sprintf("%s conv -o flac \"%s\" -d \"%s\"", shntool, input, path)
 					}
+					cmdVerbose(cmd, true)
 					err, stdout, errout := Shellout(cmd)
 					execVerbose(err, stdout, errout, verbose)
 
