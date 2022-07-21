@@ -106,6 +106,9 @@ func main() {
 		}
 	}
 
+	//create spinner
+	NewSpinner()
+
 	//split flac, ape, wav files according to cue by directories
 	split := args["split"].(bool)
 	parallel := args["parallel"].(uint)
