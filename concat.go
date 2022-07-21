@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"golang.org/x/sync/errgroup"
 )
@@ -24,7 +25,6 @@ func ConcatFlacs(sox, dir string, parallel uint, rename, remove, verbose, worked
 	StartSpinner()
 	g, _ := errgroup.WithContext(context.Background())
 	g.SetLimit(int(parallel))
-	cdNum := 1
 	for _, path := range keys {
 		path := path
 		files := pathes[path]
@@ -43,13 +43,13 @@ func ConcatFlacs(sox, dir string, parallel uint, rename, remove, verbose, worked
 			}
 			input = fmt.Sprintf("%s \"%s/%s\" ", input, path, newName)
 		}
-		cmd = fmt.Sprintf("%s %s\"%s/CD%d.flac\"", cmd, input, path, cdNum)
+
+		cmd = fmt.Sprintf("%s %s\"%s/%s.flac\"", cmd, input, path, getLastDir(path))
 		if verbose {
 			fmt.Println()
 			fmt.Println(cmd)
 			fmt.Println()
 		}
-		cdNum++
 		g.Go(func() error {
 			err, out, errout := Shellout(cmd)
 			if verbose {
@@ -83,4 +83,13 @@ func ConcatFlacs(sox, dir string, parallel uint, rename, remove, verbose, worked
 	StopSpinner()
 	return err
 
+}
+
+func getLastDir(path string) string {
+	split := strings.Split(path, "/")
+	cnt := len(split)
+	if cnt > 0 {
+		return split[len(split)-1]
+	}
+	return path
 }
