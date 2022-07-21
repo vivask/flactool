@@ -30,10 +30,6 @@ func ConcatFlacs(sox, dir string, dirs []string, parallel uint, remove, verbose 
 		}
 	}
 
-	for _, path := range keys {
-		fmt.Println(pathes[path])
-	}
-
 	StartSpinner()
 	defer StopSpinner()
 	g, _ := errgroup.WithContext(context.Background())
@@ -51,11 +47,11 @@ func ConcatFlacs(sox, dir string, dirs []string, parallel uint, remove, verbose 
 
 		out := fmt.Sprintf("%s/%s.flac", path, getLastDir(path))
 		cmd = fmt.Sprintf("%s %s%s", cmd, input, quotes(out))
-		cmdVerbose(cmd, verbose)
+		cmdVerbose(cmd, true)
 		g.Go(func() error {
 			//concat shntool
 			err, stdout, errout := Shellout(cmd)
-			execVerbose(err, stdout, errout, verbose)
+			execVerbose(err, stdout, errout, true)
 			if err != nil {
 				return err
 			}
