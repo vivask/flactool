@@ -1,12 +1,14 @@
 package main
 
 import (
-	"fmt"
-	"os"
 	"time"
+
+	"github.com/briandowns/spinner"
 )
 
-var stopSpinner bool
+var s *spinner.Spinner
+
+/*var stopSpinner bool
 var wait chan struct{} = make(chan struct{})
 
 func spinner(delay time.Duration) {
@@ -30,4 +32,18 @@ func StartSpinner() {
 func StopSpinner() {
 	stopSpinner = true
 	<-wait
+}*/
+
+func NewSpinner() {
+	s = spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+}
+
+//start animation progress
+func StartSpinner() {
+	s.Start()
+}
+
+//stop animation progress
+func StopSpinner() {
+	s.Stop()
 }
