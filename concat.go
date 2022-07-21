@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 
 	"golang.org/x/sync/errgroup"
@@ -64,10 +65,21 @@ func ConcatFlacs(sox, dir string, parallel uint, remove, verbose bool) error {
 					}
 				}
 				//move result to parent dir
-				fmt.Printf("QSrc: %s, QDst: %s\n", quotes_1(out), quotes_1(getParentPath(out)))
-				err = os.Rename(quotes_1(out), quotes_1(getParentPath(out)))
-				if err != nil {
-					return err
+				cmd = fmt.Sprintf("mv %s %s", quotes(out), quotes(getParentPath(out)))
+				if verbose {
+					fmt.Println()
+					fmt.Println(cmd)
+					fmt.Println()
+				}
+				err, out, errout := Shellout(cmd)
+				if verbose {
+					if err != nil {
+						log.Printf("error: %v\n", err)
+					}
+					fmt.Println("--- stdout ---")
+					fmt.Println(out)
+					fmt.Println("--- stderr ---")
+					fmt.Println(errout)
 				}
 			}
 			return err
@@ -81,9 +93,4 @@ func ConcatFlacs(sox, dir string, parallel uint, remove, verbose bool) error {
 // return "src"
 func quotes(src string) string {
 	return fmt.Sprintf("\"%s\"", src)
-}
-
-// return "src"
-func quotes_1(src string) string {
-	return fmt.Sprintf("'%s'", src)
 }
