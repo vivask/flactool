@@ -2,6 +2,8 @@ package main
 
 import (
 	"bytes"
+	"fmt"
+	"log"
 	"os/exec"
 )
 
@@ -16,4 +18,24 @@ func Shellout(command string) (error, string, string) {
 	cmd.Stderr = &stderr
 	err := cmd.Run()
 	return err, stdout.String(), stderr.String()
+}
+
+func cmdVerbose(cmd string, verbose bool) {
+	if verbose {
+		fmt.Println()
+		fmt.Println(cmd)
+		fmt.Println()
+	}
+}
+
+func execVerbose(err error, out, errout string, verbose bool) {
+	if verbose {
+		if err != nil {
+			log.Printf("error: %v\n", err)
+		}
+		fmt.Println("--- stdout ---")
+		fmt.Println(out)
+		fmt.Println("--- stderr ---")
+		fmt.Println(errout)
+	}
 }

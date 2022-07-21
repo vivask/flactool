@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"sort"
@@ -156,24 +155,4 @@ func getParentPath(path string) string {
 		return fmt.Sprintf("/%s", filepath.Base(path))
 	}
 	return fmt.Sprintf("%s/%s", parent, filepath.Base(path))
-}
-
-func cmdVerbose(cmd string, verbose bool) {
-	if verbose {
-		fmt.Println()
-		fmt.Println(cmd)
-		fmt.Println()
-	}
-}
-
-func execVerbose(err error, out, errout string, verbose bool) {
-	if verbose {
-		if err != nil {
-			log.Printf("error: %v\n", err)
-		}
-		fmt.Println("--- stdout ---")
-		fmt.Println(out)
-		fmt.Println("--- stderr ---")
-		fmt.Println(errout)
-	}
 }

@@ -43,7 +43,7 @@ func ConcatFlacs(sox, dir string, parallel uint, remove, verbose bool) error {
 			err, out, errout := Shellout(cmd)
 			execVerbose(err, out, errout, verbose)
 			if err != nil {
-				fmt.Println(err)
+				execVerbose(err, out, errout, true)
 				return err
 			}
 
