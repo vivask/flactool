@@ -31,7 +31,7 @@ To use the program, you must first install the following packages:
 
 2. All ape and wav files from the current directory (with subdirectories) are split with cue (if there is a cue file with a name similar to ape or wav) with conversion to flac. With the subsequent removal of the original ape and wav files
 
-    flactool -s -R
+    flactool -s -r
 
 ### Build 
 To build from source code you need run the following commands:
