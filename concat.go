@@ -30,8 +30,8 @@ func ConcatFlacs(sox, dir string, dirs []string, parallel uint, remove, verbose 
 		}
 	}
 
-	for _, path := range pathes {
-		fmt.Println(path)
+	for _, path := range keys {
+		fmt.Println(pathes[path])
 	}
 
 	StartSpinner()
