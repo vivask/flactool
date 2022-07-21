@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/briandowns/spinner"
@@ -22,4 +23,5 @@ func StartSpinner() {
 //stop animation progress
 func StopSpinner() {
 	s.Stop()
+	fmt.Println()
 }
