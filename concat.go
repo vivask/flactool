@@ -38,12 +38,12 @@ func ConcatFlacs(sox, dir string, parallel uint, remove, verbose bool) error {
 		cmd = fmt.Sprintf("%s %s%s", cmd, input, quotes(out))
 		cmdVerbose(cmd, verbose)
 		g.Go(func() error {
-			err, out, errout := Shellout(cmd)
-			execVerbose(err, out, errout, verbose)
+			//err, out, errout := Shellout(cmd)
+			//execVerbose(err, out, errout, verbose)
 			if err == nil {
 				//remove source files
-				for _, file := range files {
-					if remove {
+				if remove {
+					for _, file := range files {
 						r := fmt.Sprintf("%s/%s", path, file)
 						err = os.Remove(r)
 						if err != nil {
