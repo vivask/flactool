@@ -65,12 +65,13 @@ func ConcatFlacs(sox, dir string, parallel uint, remove, verbose bool) error {
 	if err != nil {
 		return err
 	}
+	//move result to parent dir
 	for _, path := range keys {
 		out := fmt.Sprintf("%s/%s.flac", path, getLastDir(path))
-		err := os.Rename(quotes(out), quotes(getParentPath(out)))
-		if err != nil {
-			return err
-		}
+		cmd := fmt.Sprintf("mv %s %s", quotes(out), quotes(getParentPath(out)))
+		cmdVerbose(cmd, verbose)
+		err, out, errout := Shellout(cmd)
+		execVerbose(err, out, errout, verbose)
 	}
 	return nil
 }
