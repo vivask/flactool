@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sort"
@@ -11,7 +12,7 @@ import (
 
 type FileList map[string][]string
 
-//Recursive search for files in a given directory by a list of extensions
+//Recursive search files in a given directory by a list of extensions
 func getFilesFromDir(dir string, extSet ...string) (list []string, err error) {
 	StartSpinner()
 	defer StopSpinner()
@@ -27,6 +28,32 @@ func getFilesFromDir(dir string, extSet ...string) (list []string, err error) {
 			return nil
 		})
 	return
+}
+
+//Search files in a given directoryes by a list of extensions
+func getFilesFromDirs(dirs []string, extSet ...string) (list FileList, keys []string, err error) {
+	list = make(FileList)
+	for _, dir := range dirs {
+		files, err := ioutil.ReadDir(dir)
+		if err != nil {
+			return list, keys, err
+		}
+		for _, info := range files {
+			ext := filepath.Ext(info.Name())
+			if !info.IsDir() && isInclude(ext, extSet) {
+				path := fmt.Sprintf("%s/%s", dir, info.Name())
+				list[dir] = append(list[dir], path)
+			}
+		}
+	}
+	//create sort slice for map
+	keys = make([]string, 0, len(list))
+	for k := range list {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	return list, keys, nil
 }
 
 //Generating a list of files in the FileList format

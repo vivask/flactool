@@ -138,8 +138,9 @@ func main() {
 
 	//converting input files by directories to flac
 	concat := args["concat"].(bool)
+	var dirs []string
 	if len(dir) != 0 {
-		err = DirToFlac(shntool, ffmpeg, dir, parallel, concat, remove, verbose)
+		dirs, err = DirToFlac(shntool, ffmpeg, dir, parallel, concat, remove, verbose)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -148,7 +149,7 @@ func main() {
 
 	//concatenation of flac, ape, wav files by directories with conversion to flac
 	if concat {
-		err = ConcatFlacs(sox, dir, parallel, remove, verbose)
+		err = ConcatFlacs(sox, dir, dirs, parallel, remove, verbose)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)

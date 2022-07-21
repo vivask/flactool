@@ -8,17 +8,27 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-//concatenation of flac, ape, wav files by directories with conversion to flac
-func ConcatFlacs(sox, dir string, parallel uint, remove, verbose bool) error {
-	list, err := getFilesFromDir(dir, ".flac")
-	if err != nil {
-		return fmt.Errorf("error: %w", err)
-	}
-	if len(list) == 0 {
-		return fmt.Errorf("flac files not found")
-	}
+//concatenation of flac files by directories
+func ConcatFlacs(sox, dir string, dirs []string, parallel uint, remove, verbose bool) error {
 
-	pathes, keys := prepareFiles(list, false)
+	var pathes FileList
+	var keys []string
+	var err error
+	if len(dirs) == 0 {
+		list, err := getFilesFromDir(dir, ".flac")
+		if err != nil {
+			return fmt.Errorf("error: %w", err)
+		}
+		if len(list) == 0 {
+			return fmt.Errorf("flac files not found")
+		}
+		pathes, keys = prepareFiles(list, false)
+	} else {
+		pathes, keys, err = getFilesFromDirs(dirs, ".flac")
+		if err != nil {
+			return err
+		}
+	}
 
 	StartSpinner()
 	defer StopSpinner()

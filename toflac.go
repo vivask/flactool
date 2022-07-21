@@ -23,21 +23,21 @@ func FileToFlac(shntool, ffmpeg, input string, verbose bool) {
 	execVerbose(err, out, errout, verbose)
 }
 
-func DirToFlac(shntool, ffmpeg, dir string, parallel uint, concat, remove, verbose bool) (err error) {
+func DirToFlac(shntool, ffmpeg, dir string, parallel uint, concat, remove, verbose bool) (dirs []string, err error) {
 	list, err := getFilesFromDir(dir, ".ape", ".wav", ".dsf")
 	if len(list) == 0 {
 		if !concat {
-			return fmt.Errorf("audio files not found")
+			return dirs, fmt.Errorf("audio files not found")
 		}
 	} else {
 
 		ext := filepath.Ext(list[0])
-		pathes, keys := prepareFiles(list, true)
+		pathes, dirs := prepareFiles(list, true)
 
 		StartSpinner()
 		g, _ := errgroup.WithContext(context.Background())
 		g.SetLimit(int(parallel))
-		for _, path := range keys {
+		for _, path := range dirs {
 			path := path
 			for _, file := range pathes[path] {
 				input := fmt.Sprintf("%s/%s", path, file)
@@ -63,7 +63,7 @@ func DirToFlac(shntool, ffmpeg, dir string, parallel uint, concat, remove, verbo
 		}
 		err = g.Wait()
 		StopSpinner()
-		return err
+		return dirs, err
 	}
-	return nil
+	return dirs, nil
 }
