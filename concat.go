@@ -66,10 +66,10 @@ func ConcatFlacs(sox, dir string, parallel uint, remove, verbose bool) error {
 				//move result to parent dir
 				fmt.Printf("Src: %s, Dst: %s\n", out, getParentPath(out))
 				fmt.Printf("QSrc: %s, QDst: %s\n", quotes(out), quotes(getParentPath(out)))
-				/*err = os.Rename(quotes(out), quotes(getParentPath(out)))
+				err = os.Rename(quotes(out), quotes(getParentPath(out)))
 				if err != nil {
 					return err
-				}*/
+				}
 			}
 			return err
 		})
