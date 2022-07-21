@@ -30,6 +30,10 @@ func ConcatFlacs(sox, dir string, dirs []string, parallel uint, remove, verbose 
 		}
 	}
 
+	for _, path := range pathes {
+		fmt.Println(path)
+	}
+
 	StartSpinner()
 	defer StopSpinner()
 	g, _ := errgroup.WithContext(context.Background())
