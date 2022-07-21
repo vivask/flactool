@@ -38,16 +38,14 @@ func getFilesFromDirs(dirs []string, extSet ...string) (list FileList, keys []st
 		if err != nil {
 			return list, keys, err
 		}
-		count := 0
 		for _, info := range files {
 			ext := filepath.Ext(info.Name())
 			if !info.IsDir() && isInclude(ext, extSet) {
 				path := fmt.Sprintf("%s/%s", dir, info.Name())
 				list[dir] = append(list[dir], path)
-				count++
+				fmt.Printf("%s\n", path)
 			}
 		}
-		fmt.Printf("%s: %d\n", dir, count)
 	}
 	//create sort slice for map
 	keys = make([]string, 0, len(list))
