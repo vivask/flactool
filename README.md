@@ -16,7 +16,8 @@ To use the program, you must first install the following packages:
 ## Uasage:
 
     flactool [OPTION] 
--  -c concat all flac files in dir to one flac file
+-  -c convert dsf/wav/ape files in dir to flac
+-  -C concat all flac files in dir to one flac file
 -  -s split flac or ape files in dir
 -  -d "path"
 -  -f "file"
@@ -26,13 +27,18 @@ To use the program, you must first install the following packages:
 -  -v verbose
 
 ## Examples:
-1. Convert all ape files from ~/apedir (with subdirectories) to flac
+1. Convert all dsf/wav/ape files from ~/apedir (with subdirectories) to flac
 
-    flactool -d ~/apedir 
+    flactool -d ~/apedir -c 
 
 2. All ape and wav files from the current directory (with subdirectories) are split with cue (if there is a cue file with a name similar to ape or wav) with conversion to flac. With the subsequent removal of the original ape and wav files
 
     flactool -s -r
+
+3. Convert all dsf/wav/ape files from current dir (with subdirectories) to flac then concatenate the converted
+
+    flactool -c -C
+
 
 ### Build 
 To build from source code you need run the following commands:
