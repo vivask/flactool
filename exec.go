@@ -20,6 +20,7 @@ func Shellout(command string) (error, string, string) {
 	return err, stdout.String(), stderr.String()
 }
 
+//print system exec command
 func cmdVerbose(cmd string, verbose bool) {
 	if verbose {
 		fmt.Println()
@@ -28,6 +29,7 @@ func cmdVerbose(cmd string, verbose bool) {
 	}
 }
 
+//print system exec response
 func execVerbose(err error, out, errout string, verbose bool) {
 	if verbose {
 		if err != nil {

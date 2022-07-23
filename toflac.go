@@ -9,6 +9,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+//convert dsf/ape/wav file to flac
 func FileToFlac(shntool, ffmpeg, input string, verbose bool) {
 	var cmd string
 	ext := filepath.Ext(input)
@@ -23,6 +24,7 @@ func FileToFlac(shntool, ffmpeg, input string, verbose bool) {
 	execVerbose(err, out, errout, verbose)
 }
 
+//convert dsf/ape/wav files to flac
 func DirToFlac(shntool, ffmpeg, dir string, parallel uint, concat, remove, verbose bool) (dirs []string, err error) {
 	list, err := getFilesFromDir(dir, ".ape", ".wav", ".dsf")
 	if len(list) == 0 {
