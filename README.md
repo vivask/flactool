@@ -7,6 +7,7 @@ Multithreaded, batch tool for converting, concatenating and splitting audio file
 
 
 To use the program, you must first install the following packages:
+- ffmpeg;
 - Monkey's Audio Codec; https://github.com/fernandotcl/monkeys-audio;
 - shntool;
 - cuetools;
