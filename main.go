@@ -19,12 +19,13 @@ type Arguments map[string]interface{}
 
 func parseArgs() Arguments {
 	var fName, dirName string
-	var concat, split, remove, verbose, help bool
+	var convert, concat, split, remove, verbose, help bool
 	var parallel uint
 	flag.StringVar(&fName, "f", "", `-f "file"`)
 	flag.StringVar(&dirName, "d", "", `-d "path"`)
 	flag.UintVar(&parallel, "p", 4, "-p num cpu cores, default 4")
-	flag.BoolVar(&concat, "c", false, "-c concat all flac files in dir to one flac file")
+	flag.BoolVar(&convert, "c", false, "-c convert dsf/wav/ape files in dir to flac")
+	flag.BoolVar(&concat, "C", false, "-C concat all flac files in dir to one flac file")
 	flag.BoolVar(&split, "s", false, "-s split flac or ape files in dir")
 	flag.BoolVar(&remove, "r", false, "-r remove source after operation")
 	flag.BoolVar(&verbose, "v", false, "-v verbose")
@@ -35,6 +36,7 @@ func parseArgs() Arguments {
 	args["file"] = fName
 	args["dir"] = dirName
 	args["parallel"] = parallel
+	args["convert"] = convert
 	args["concat"] = concat
 	args["split"] = split
 	args["remove"] = remove
@@ -137,9 +139,10 @@ func main() {
 	}
 
 	//converting input files by directories to flac
+	convert := args["convert"].(bool)
 	concat := args["concat"].(bool)
 	var dirs []string
-	if len(dir) != 0 {
+	if len(dir) != 0 && convert {
 		dirs, err = DirToFlac(shntool, ffmpeg, dir, parallel, concat, remove, verbose)
 		if err != nil {
 			fmt.Println(err)
@@ -148,7 +151,7 @@ func main() {
 	}
 
 	//concatenation of flac, ape, wav files by directories with conversion to flac
-	if concat {
+	if len(dir) != 0 && concat {
 		err = ConcatFlacs(sox, dir, dirs, parallel, remove, verbose)
 		if err != nil {
 			fmt.Println(err)
