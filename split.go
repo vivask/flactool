@@ -35,26 +35,31 @@ func SplitApeOrFlac(shntool, cuetag, dir string, parallel uint, remove, verbose 
 		g, _ := errgroup.WithContext(context.Background())
 		g.SetLimit(int(parallel))
 		for _, file := range files {
+			//prepare shell command
 			file := file
 			cue := replaceExtToCue(file)
 			out := filepath.Dir(file)
 			cmd := shntool + " split -f \"" + cue + "\" -o flac -t \"%n %t\" " + "\"" + file + "\" -d " + "\"" + out + "\""
 			cmdVerbose(cmd, verbose)
 			g.Go(func() error {
+				//split file
 				err, stdout, errout := Shellout(cmd)
 				execVerbose(err, stdout, errout, verbose)
-				if err == nil {
-					if remove {
-						err = os.Remove(file)
-						if err != nil {
-							return err
-						}
-					}
-					cmd := fmt.Sprintf("%s \"%s\" \"%s/*%s\"", cuetag, cue, filepath.Dir(file), filepath.Ext(file))
-					cmdVerbose(cmd, verbose)
-					err, stdout, errout := Shellout(cmd)
-					execVerbose(err, stdout, errout, verbose)
+				if err != nil {
+					return err
 				}
+				//remove source
+				if remove {
+					err = os.Remove(file)
+					if err != nil {
+						return err
+					}
+				}
+				//tag files based on cue file information
+				cmd := fmt.Sprintf("%s \"%s\" \"%s/*%s\"", cuetag, cue, filepath.Dir(file), filepath.Ext(file))
+				cmdVerbose(cmd, verbose)
+				err, stdout, errout = Shellout(cmd)
+				execVerbose(err, stdout, errout, verbose)
 				return err
 			})
 		}
